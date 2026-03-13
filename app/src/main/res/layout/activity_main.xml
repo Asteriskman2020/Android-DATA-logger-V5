@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FAFAFA">
+    android:background="#FFF3E0">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#616161"
+        android:background="#F57C00"
         android:elevation="4dp"
         app:titleTextColor="#FFFFFF" />
 
@@ -18,7 +18,7 @@
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#616161"
+        android:background="#F57C00"
         app:tabTextColor="#80FFFFFF"
         app:tabSelectedTextColor="#FFFFFF"
         app:tabIndicatorColor="#FFFFFF"

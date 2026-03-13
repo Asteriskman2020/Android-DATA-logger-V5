@@ -26,8 +26,6 @@ class DataFragment : Fragment(), BleManager.BleCallback {
     private lateinit var tvHumidity: TextView
     private lateinit var tvPressure: TextView
     private lateinit var tvTempBmp: TextView
-    private lateinit var progressBuffer: ProgressBar
-    private lateinit var tvBufferCount: TextView
 
     private lateinit var btnFetchAll: Button
     private lateinit var btnAcquireData: Button
@@ -76,8 +74,6 @@ class DataFragment : Fragment(), BleManager.BleCallback {
         tvHumidity = view.findViewById(R.id.tvHumidityValue)
         tvPressure = view.findViewById(R.id.tvPressureValue)
         tvTempBmp = view.findViewById(R.id.tvTempBmpValue)
-        progressBuffer = view.findViewById(R.id.progressBuffer)
-        tvBufferCount = view.findViewById(R.id.tvBufferCount)
 
         btnFetchAll = view.findViewById(R.id.btnFetchAll)
         btnAcquireData = view.findViewById(R.id.btnAcquireData)
@@ -119,8 +115,6 @@ class DataFragment : Fragment(), BleManager.BleCallback {
             sensorRecords.clear()
             sensorAdapter.clear()
             tvDataCount.text = "0 records"
-            tvBufferCount.text = "0"
-            progressBuffer.progress = 0
             addLog("Acquire started — ESP32 buffer cleared, collecting new data...")
         }
 
@@ -240,6 +234,9 @@ class DataFragment : Fragment(), BleManager.BleCallback {
         }
         isFetching = true
         pendingRecords.clear()
+        sensorRecords.clear()
+        sensorAdapter.clear()
+        tvDataCount.text = "0 records"
         btnFetchAll.isEnabled = false
         btnFetchAll.text = "Fetching..."
         addLog("Sending READBUF — waiting for buffer stream...")
@@ -346,8 +343,7 @@ class DataFragment : Fragment(), BleManager.BleCallback {
     }
 
     override fun onCountUpdate(count: Int) {
-        tvBufferCount.text = count.toString()
-        progressBuffer.progress = count
+        // buffer count display removed
     }
 
     override fun onBufferRecord(record: SensorRecord) {
@@ -378,8 +374,6 @@ class DataFragment : Fragment(), BleManager.BleCallback {
         // Auto-clear ESP32 flash after successful fetch
         if (snapshot.isNotEmpty()) {
             (activity as MainActivity).bleManager.sendCommand("CLRBUF")
-            tvBufferCount.text = "0"
-            progressBuffer.progress = 0
             addLog("Flash cleared automatically after fetch")
         }
     }
