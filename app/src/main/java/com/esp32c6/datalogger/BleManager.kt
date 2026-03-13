@@ -257,9 +257,9 @@ class BleManager(private val context: Context) {
             return
         }
 
-        // Enable notifications for ab000005, ab000006, ab000007
-        // (ab000002 and ab000004 don't exist in BLE_SensorLogger firmware — skipped safely)
-        listOf(CHAR_MESSAGE_UUID, CHAR_STATUS_UUID, CHAR_SENSOR_UUID, CHAR_COUNT_UUID, CHAR_DATA_UUID).forEach { charUuid ->
+        // Enable notifications for chars that have NOTIFY property
+        // CHAR_COUNT_UUID is READ-only on firmware — skip notification setup for it
+        listOf(CHAR_MESSAGE_UUID, CHAR_STATUS_UUID, CHAR_SENSOR_UUID, CHAR_DATA_UUID).forEach { charUuid ->
             val char = service.getCharacteristic(charUuid)
             if (char != null) {
                 enqueueOperation(Runnable { enableNotification(gatt, char) })
@@ -278,12 +278,19 @@ class BleManager(private val context: Context) {
         gatt.setCharacteristicNotification(characteristic, true)
         val descriptor = characteristic.getDescriptor(CCCD_UUID)
         if (descriptor != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                gatt.writeDescriptor(descriptor, BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE)
+            val success = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                val result = gatt.writeDescriptor(descriptor, BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE)
+                result == 0 // BluetoothStatusCodes.SUCCESS
             } else {
                 descriptor.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
                 gatt.writeDescriptor(descriptor)
             }
+            if (!success) {
+                // writeDescriptor failed — won't get onDescriptorWrite callback, advance queue now
+                mainHandler.post { callback?.onLog("CCCD write failed for ${characteristic.uuid}, advancing queue") }
+                operationComplete()
+            }
+            // else: wait for onDescriptorWrite to advance the queue
         } else {
             mainHandler.post { callback?.onLog("No CCCD for ${characteristic.uuid}") }
             operationComplete()
