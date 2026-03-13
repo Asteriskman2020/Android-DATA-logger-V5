@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFEBEE">
+    android:background="#FAFAFA">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            app:cardBackgroundColor="#FFCDD2"
+            app:cardBackgroundColor="#F5F5F5"
             app:cardCornerRadius="12dp"
             app:cardElevation="3dp">
 
@@ -30,7 +30,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="CONNECTION"
-                    android:textColor="#B71C1C"
+                    android:textColor="#424242"
                     android:textSize="12sp"
                     android:textStyle="bold"
                     android:letterSpacing="0.08"
@@ -87,7 +87,7 @@
                         android:layout_weight="1"
                         android:layout_marginEnd="6dp"
                         android:text="SCAN"
-                        android:backgroundTint="#C62828"
+                        android:backgroundTint="#616161"
                         android:textColor="#FFFFFF"
                         style="@style/Widget.MaterialComponents.Button" />
 
@@ -111,7 +111,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            app:cardBackgroundColor="#FFCDD2"
+            app:cardBackgroundColor="#F5F5F5"
             app:cardCornerRadius="12dp"
             app:cardElevation="3dp">
 
@@ -125,7 +125,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="LIVE SENSOR DATA"
-                    android:textColor="#B71C1C"
+                    android:textColor="#424242"
                     android:textSize="12sp"
                     android:textStyle="bold"
                     android:letterSpacing="0.08"
@@ -263,7 +263,7 @@
                         android:layout_weight="1"
                         android:max="25"
                         android:progress="0"
-                        android:progressTint="#C62828" />
+                        android:progressTint="#616161" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -281,7 +281,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            app:cardBackgroundColor="#FFCDD2"
+            app:cardBackgroundColor="#F5F5F5"
             app:cardCornerRadius="12dp"
             app:cardElevation="3dp">
 
@@ -295,7 +295,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="ACTIONS"
-                    android:textColor="#B71C1C"
+                    android:textColor="#424242"
                     android:textSize="12sp"
                     android:textStyle="bold"
                     android:letterSpacing="0.08"
@@ -307,7 +307,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:text="FETCH VIA BLE"
-                    android:backgroundTint="#C62828"
+                    android:backgroundTint="#616161"
                     android:textColor="#FFFFFF"
                     style="@style/Widget.MaterialComponents.Button" />
 
@@ -346,7 +346,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            app:cardBackgroundColor="#FFCDD2"
+            app:cardBackgroundColor="#F5F5F5"
             app:cardCornerRadius="12dp"
             app:cardElevation="3dp">
 
@@ -367,7 +367,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="DATA HISTORY"
-                        android:textColor="#B71C1C"
+                        android:textColor="#424242"
                         android:textSize="12sp"
                         android:textStyle="bold"
                         android:letterSpacing="0.08" />
@@ -382,10 +382,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0 records"
-                        android:textColor="#C62828"
+                        android:textColor="#616161"
                         android:textSize="12sp"
                         android:textStyle="bold"
-                        android:background="#EF9A9A"
+                        android:background="#BDBDBD"
                         android:paddingStart="8dp"
                         android:paddingEnd="8dp"
                         android:paddingTop="2dp"
@@ -397,7 +397,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:background="#EF9A9A"
+                    android:background="#BDBDBD"
                     android:paddingTop="4dp"
                     android:paddingBottom="4dp">
 
@@ -474,7 +474,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            app:cardBackgroundColor="#FFCDD2"
+            app:cardBackgroundColor="#F5F5F5"
             app:cardCornerRadius="12dp"
             app:cardElevation="3dp">
 
@@ -496,7 +496,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="EVENT LOG"
-                        android:textColor="#B71C1C"
+                        android:textColor="#424242"
                         android:textSize="12sp"
                         android:textStyle="bold"
                         android:letterSpacing="0.08" />
@@ -507,7 +507,7 @@
                         android:layout_height="28dp"
                         android:text="CLEAR"
                         android:textSize="10sp"
-                        android:backgroundTint="#EF9A9A"
+                        android:backgroundTint="#BDBDBD"
                         android:textColor="#212121"
                         android:paddingStart="10dp"
                         android:paddingEnd="10dp"

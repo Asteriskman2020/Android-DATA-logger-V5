@@ -303,10 +303,10 @@ class BleManager(private val context: Context) {
             var tempBmp = 0f
             parts.forEach { part ->
                 when {
+                    part.startsWith("Tb:") -> tempBmp = part.substring(3).toFloat()
                     part.startsWith("T:") -> tempAht = part.substring(2).toFloat()
                     part.startsWith("H:") -> humidity = part.substring(2).toFloat()
                     part.startsWith("P:") -> pressure = part.substring(2).toFloat()
-                    part.startsWith("Tb:") -> tempBmp = part.substring(3).toFloat()
                 }
             }
             SensorRecord(0, tempAht, humidity, pressure, tempBmp)

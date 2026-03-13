@@ -2,12 +2,12 @@
 <resources>
 
     <style name="Theme.DataLoggerV5" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">@color/red_primary</item>
-        <item name="colorPrimaryDark">@color/red_primary_dark</item>
-        <item name="colorAccent">@color/red_accent</item>
-        <item name="android:windowBackground">@color/red_bg</item>
-        <item name="android:statusBarColor">@color/red_primary_dark</item>
-        <item name="android:navigationBarColor">@color/red_primary</item>
+        <item name="colorPrimary">@color/grey_primary</item>
+        <item name="colorPrimaryDark">@color/grey_primary_dark</item>
+        <item name="colorAccent">@color/grey_accent</item>
+        <item name="android:windowBackground">@color/grey_bg</item>
+        <item name="android:statusBarColor">@color/grey_primary_dark</item>
+        <item name="android:navigationBarColor">@color/grey_primary</item>
     </style>
 
 </resources>

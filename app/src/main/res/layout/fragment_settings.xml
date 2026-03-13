@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFEBEE">
+    android:background="#FAFAFA">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            app:cardBackgroundColor="#FFCDD2"
+            app:cardBackgroundColor="#F5F5F5"
             app:cardCornerRadius="12dp"
             app:cardElevation="3dp">
 
@@ -30,7 +30,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="MQTT SETTINGS"
-                    android:textColor="#B71C1C"
+                    android:textColor="#424242"
                     android:textSize="12sp"
                     android:textStyle="bold"
                     android:letterSpacing="0.08"
@@ -144,7 +144,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="TEST CONNECTION"
-                    android:backgroundTint="#C62828"
+                    android:backgroundTint="#616161"
                     android:textColor="#FFFFFF"
                     style="@style/Widget.MaterialComponents.Button" />
             </LinearLayout>
@@ -155,7 +155,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            app:cardBackgroundColor="#FFCDD2"
+            app:cardBackgroundColor="#F5F5F5"
             app:cardCornerRadius="12dp"
             app:cardElevation="3dp">
 
@@ -169,7 +169,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="DEVICE SETTINGS"
-                    android:textColor="#B71C1C"
+                    android:textColor="#424242"
                     android:textSize="12sp"
                     android:textStyle="bold"
                     android:letterSpacing="0.08"
@@ -222,7 +222,7 @@
             android:layout_marginBottom="16dp"
             android:text="SAVE SETTINGS"
             android:textSize="16sp"
-            android:backgroundTint="#C62828"
+            android:backgroundTint="#616161"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
             style="@style/Widget.MaterialComponents.Button" />

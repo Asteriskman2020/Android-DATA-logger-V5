@@ -7,10 +7,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class SensorAdapter(
-    private var records: MutableList<SensorRecord> = mutableListOf(),
-    private val onItemClick: ((SensorRecord) -> Unit)? = null
-) : RecyclerView.Adapter<SensorAdapter.ViewHolder>() {
+class SensorAdapter : RecyclerView.Adapter<SensorAdapter.ViewHolder>() {
+
+    private val records = mutableListOf<SensorRecord>()
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvIndex: TextView = view.findViewById(R.id.tvIndex)
@@ -37,12 +36,8 @@ class SensorAdapter(
         holder.tvTempBmp.text = "%.1f".format(record.tempBmp)
 
         holder.itemView.setBackgroundColor(
-            if (position % 2 == 0) Color.WHITE else Color.parseColor("#FFCDD2")
+            if (position % 2 == 0) Color.WHITE else Color.parseColor("#EEEEEE")
         )
-
-        onItemClick?.let { click ->
-            holder.itemView.setOnClickListener { click(record) }
-        }
     }
 
     override fun getItemCount(): Int = records.size

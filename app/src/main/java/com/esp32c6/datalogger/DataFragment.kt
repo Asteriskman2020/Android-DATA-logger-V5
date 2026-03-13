@@ -91,7 +91,7 @@ class DataFragment : Fragment(), BleManager.BleCallback {
         scrollLog = view.findViewById(R.id.scrollLog)
         btnClearLog = view.findViewById(R.id.btnClearLog)
 
-        sensorAdapter = SensorAdapter(sensorRecords)
+        sensorAdapter = SensorAdapter()
         rvData.layoutManager = LinearLayoutManager(requireContext())
         rvData.adapter = sensorAdapter
         rvData.isNestedScrollingEnabled = false
@@ -117,7 +117,7 @@ class DataFragment : Fragment(), BleManager.BleCallback {
             }
             ma.bleManager.sendCommand("CLRBUF")
             sensorRecords.clear()
-            sensorAdapter.updateData(sensorRecords)
+            sensorAdapter.clear()
             tvDataCount.text = "0 records"
             tvBufferCount.text = "0"
             progressBuffer.progress = 0
@@ -365,11 +365,11 @@ class DataFragment : Fragment(), BleManager.BleCallback {
         val snapshot = pendingRecords.toList()
         pendingRecords.clear()
 
-        // Update table
+        // Update table — pass snapshot directly (adapter owns its own list)
         sensorRecords.clear()
         sensorRecords.addAll(snapshot)
-        sensorAdapter.updateData(sensorRecords)
-        tvDataCount.text = "${sensorRecords.size} records"
+        sensorAdapter.updateData(snapshot)
+        tvDataCount.text = "${snapshot.size} records"
 
         btnFetchAll.isEnabled = true
         btnFetchAll.text = "FETCH VIA BLE"
