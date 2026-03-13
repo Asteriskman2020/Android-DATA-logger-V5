@@ -131,7 +131,6 @@
                     android:letterSpacing="0.08"
                     android:layout_marginBottom="10dp" />
 
-                <!-- AHT20 Temperature -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -157,7 +156,6 @@
                         android:textStyle="bold" />
                 </LinearLayout>
 
-                <!-- Humidity -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -183,7 +181,6 @@
                         android:textStyle="bold" />
                 </LinearLayout>
 
-                <!-- Pressure -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -209,7 +206,6 @@
                         android:textStyle="bold" />
                 </LinearLayout>
 
-                <!-- BMP280 Temperature -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -265,14 +261,14 @@
                         android:layout_width="0dp"
                         android:layout_height="14dp"
                         android:layout_weight="1"
-                        android:max="100"
+                        android:max="25"
                         android:progress="0"
                         android:progressTint="#C62828" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="/20"
+                        android:text="/25"
                         android:textColor="#757575"
                         android:textSize="12sp"
                         android:layout_marginStart="4dp" />
@@ -316,12 +312,12 @@
                     style="@style/Widget.MaterialComponents.Button" />
 
                 <Button
-                    android:id="@+id/btnClearMemory"
+                    android:id="@+id/btnAcquireData"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:text="CLEAR MEMORY"
-                    android:backgroundTint="#F44336"
+                    android:text="ACQUIRE DATA"
+                    android:backgroundTint="#4CAF50"
                     android:textColor="#FFFFFF"
                     style="@style/Widget.MaterialComponents.Button" />
 
@@ -331,7 +327,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:text="PUBLISH TO MQTT"
-                    android:backgroundTint="#4CAF50"
+                    android:backgroundTint="#2196F3"
                     android:textColor="#FFFFFF"
                     style="@style/Widget.MaterialComponents.Button" />
 
@@ -406,10 +402,20 @@
                     android:paddingBottom="4dp">
 
                     <TextView
-                        android:layout_width="36dp"
+                        android:layout_width="28dp"
                         android:layout_height="wrap_content"
                         android:text="#"
-                        android:textSize="11sp"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:textColor="#212121"
+                        android:gravity="center" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:text="Time"
+                        android:textSize="10sp"
                         android:textStyle="bold"
                         android:textColor="#212121"
                         android:gravity="center" />
@@ -419,7 +425,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="T°C(AHT)"
-                        android:textSize="11sp"
+                        android:textSize="10sp"
                         android:textStyle="bold"
                         android:textColor="#212121"
                         android:gravity="center" />
@@ -429,7 +435,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Hum%"
-                        android:textSize="11sp"
+                        android:textSize="10sp"
                         android:textStyle="bold"
                         android:textColor="#212121"
                         android:gravity="center" />
@@ -437,9 +443,9 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1.4"
+                        android:layout_weight="1.3"
                         android:text="Pres hPa"
-                        android:textSize="11sp"
+                        android:textSize="10sp"
                         android:textStyle="bold"
                         android:textColor="#212121"
                         android:gravity="center" />
@@ -449,7 +455,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="T°C(BMP)"
-                        android:textSize="11sp"
+                        android:textSize="10sp"
                         android:textStyle="bold"
                         android:textColor="#212121"
                         android:gravity="center" />

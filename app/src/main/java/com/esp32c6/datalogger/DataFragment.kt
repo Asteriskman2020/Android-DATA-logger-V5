@@ -30,7 +30,7 @@ class DataFragment : Fragment(), BleManager.BleCallback {
     private lateinit var tvBufferCount: TextView
 
     private lateinit var btnFetchAll: Button
-    private lateinit var btnClearMemory: Button
+    private lateinit var btnAcquireData: Button
     private lateinit var btnPublishMqtt: Button
     private lateinit var tvMqttStatus: TextView
 
@@ -51,7 +51,7 @@ class DataFragment : Fragment(), BleManager.BleCallback {
     private var scanRunnable: Runnable? = null
 
     private val logBuilder = StringBuilder()
-    private val pendingRecords = mutableListOf<SensorRecord>()  // collecting READBUF stream
+    private val pendingRecords = mutableListOf<SensorRecord>()
     private var isFetching = false
     private val fetchTimeoutHandler = Handler(Looper.getMainLooper())
 
@@ -66,14 +66,12 @@ class DataFragment : Fragment(), BleManager.BleCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Connection card
         tvStatus = view.findViewById(R.id.tvConnectionStatus)
         tvDeviceName = view.findViewById(R.id.tvDeviceName)
         dotView = view.findViewById(R.id.viewDot)
         btnScan = view.findViewById(R.id.btnScan)
         btnDisconnect = view.findViewById(R.id.btnDisconnect)
 
-        // Live sensor card
         tvTempAht = view.findViewById(R.id.tvTempAhtValue)
         tvHumidity = view.findViewById(R.id.tvHumidityValue)
         tvPressure = view.findViewById(R.id.tvPressureValue)
@@ -81,31 +79,25 @@ class DataFragment : Fragment(), BleManager.BleCallback {
         progressBuffer = view.findViewById(R.id.progressBuffer)
         tvBufferCount = view.findViewById(R.id.tvBufferCount)
 
-        // Actions card
         btnFetchAll = view.findViewById(R.id.btnFetchAll)
-        btnClearMemory = view.findViewById(R.id.btnClearMemory)
+        btnAcquireData = view.findViewById(R.id.btnAcquireData)
         btnPublishMqtt = view.findViewById(R.id.btnPublishMqtt)
         tvMqttStatus = view.findViewById(R.id.tvMqttStatus)
 
-        // Data history card
         tvDataCount = view.findViewById(R.id.tvDataCount)
         rvData = view.findViewById(R.id.rvData)
 
-        // Log card
         tvLog = view.findViewById(R.id.tvLog)
         scrollLog = view.findViewById(R.id.scrollLog)
         btnClearLog = view.findViewById(R.id.btnClearLog)
 
-        // Setup RecyclerView
         sensorAdapter = SensorAdapter(sensorRecords)
         rvData.layoutManager = LinearLayoutManager(requireContext())
         rvData.adapter = sensorAdapter
         rvData.isNestedScrollingEnabled = false
 
-        // Initial state
         setDisconnectedState()
 
-        // Button listeners
         btnScan.setOnClickListener { startScan() }
 
         btnDisconnect.setOnClickListener {
@@ -116,12 +108,20 @@ class DataFragment : Fragment(), BleManager.BleCallback {
 
         btnFetchAll.setOnClickListener { fetchAllData() }
 
-        btnClearMemory.setOnClickListener {
-            (activity as MainActivity).bleManager.sendCommand("CLRBUF")
+        // ACQUIRE DATA: clear ESP32 flash buffer (restarts collection) + clear local table
+        btnAcquireData.setOnClickListener {
+            val ma = activity as MainActivity
+            if (!ma.bleManager.isConnected()) {
+                showToast("Not connected to device")
+                return@setOnClickListener
+            }
+            ma.bleManager.sendCommand("CLRBUF")
             sensorRecords.clear()
             sensorAdapter.updateData(sensorRecords)
             tvDataCount.text = "0 records"
-            addLog("Memory cleared (CLRBUF sent)")
+            tvBufferCount.text = "0"
+            progressBuffer.progress = 0
+            addLog("Acquire started — ESP32 buffer cleared, collecting new data...")
         }
 
         btnPublishMqtt.setOnClickListener { publishAllToMqtt() }
@@ -131,10 +131,7 @@ class DataFragment : Fragment(), BleManager.BleCallback {
             tvLog.text = ""
         }
 
-        // Register callback
         (activity as MainActivity).bleManager.callback = this
-
-        // Update MQTT status
         updateMqttStatus()
     }
 
@@ -191,7 +188,6 @@ class DataFragment : Fragment(), BleManager.BleCallback {
         val ma = activity as MainActivity
         ma.bleManager.startScan()
 
-        // Show dialog after 3 seconds with found devices
         scanRunnable = Runnable {
             ma.bleManager.stopScan()
             showDevicePickerDialog()
@@ -249,8 +245,6 @@ class DataFragment : Fragment(), BleManager.BleCallback {
         addLog("Sending READBUF — waiting for buffer stream...")
         ma.bleManager.sendCommand("READBUF")
 
-        // Timeout: re-enable button if END:N never arrives within 30 seconds
-        // (100 samples × 20 ms each = 2 s transfer + generous overhead)
         fetchTimeoutHandler.postDelayed({
             if (isFetching) {
                 isFetching = false
@@ -308,7 +302,8 @@ class DataFragment : Fragment(), BleManager.BleCallback {
         Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
     }
 
-    // BleCallback implementations
+    // ── BleCallback ───────────────────────────────────────────────────────────
+
     override fun onConnected(name: String) {
         setConnectedState(name)
         addLog("Connected to $name")
@@ -338,16 +333,11 @@ class DataFragment : Fragment(), BleManager.BleCallback {
         tvPressure.text = "%.1f hPa".format(pressure)
         tvTempBmp.text = "%.1f °C".format(tempBmp)
 
-        // Auto-publish if enabled
         if ((activity as MainActivity).isAutoPublish()) {
-            val record = SensorRecord(
-                sensorRecords.size + 1,
-                tempAht, humidity, pressure, tempBmp
-            )
+            val record = SensorRecord(sensorRecords.size + 1, tempAht, humidity, pressure, tempBmp)
             (activity as MainActivity).mqttManager.publish(record.toJsonString())
         }
 
-        // Request count update
         (activity as MainActivity).bleManager.requestCountUpdate()
     }
 
@@ -361,21 +351,37 @@ class DataFragment : Fragment(), BleManager.BleCallback {
     }
 
     override fun onBufferRecord(record: SensorRecord) {
-        pendingRecords.add(record)
+        // Re-stamp with current Android time so each row shows its actual receive time
+        val stamped = record.copy(timestamp = System.currentTimeMillis())
+        pendingRecords.add(stamped)
         btnFetchAll.text = "Fetching ${pendingRecords.size}..."
     }
 
     override fun onBufferComplete(total: Int) {
         fetchTimeoutHandler.removeCallbacksAndMessages(null)
         isFetching = false
-        addLog("END received: firmware total=$total, pending=${pendingRecords.size}")
+        addLog("END received: firmware total=$total, received=${pendingRecords.size}")
+
         val snapshot = pendingRecords.toList()
         pendingRecords.clear()
-        sensorAdapter.updateData(snapshot)
+
+        // Update table
+        sensorRecords.clear()
+        sensorRecords.addAll(snapshot)
+        sensorAdapter.updateData(sensorRecords)
         tvDataCount.text = "${sensorRecords.size} records"
+
         btnFetchAll.isEnabled = true
         btnFetchAll.text = "FETCH VIA BLE"
-        addLog("Fetch done: ${sensorRecords.size} row(s) in table")
+        addLog("Fetch done: ${sensorRecords.size} row(s) displayed")
+
+        // Auto-clear ESP32 flash after successful fetch
+        if (snapshot.isNotEmpty()) {
+            (activity as MainActivity).bleManager.sendCommand("CLRBUF")
+            tvBufferCount.text = "0"
+            progressBuffer.progress = 0
+            addLog("Flash cleared automatically after fetch")
+        }
     }
 
     override fun onLog(msg: String) {
